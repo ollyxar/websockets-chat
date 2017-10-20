@@ -19,7 +19,7 @@ class WSChatServiceProvider extends ServiceProvider
     /**
      * Loading config
      */
-    public function boot()
+    public function boot(): void
     {
         $configPath = __DIR__ . '/../config/websockets-chat.php';
         if (function_exists('config_path')) {
