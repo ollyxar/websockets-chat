@@ -26,5 +26,12 @@
     "psr-4": {
       "Ollyxar\\WSChat\\": "src/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Ollyxar\\WSChat\\WSChatServiceProvider"
+      ]
+    }
   }
 }

@@ -1,6 +1,7 @@
 <?php namespace Ollyxar\WSChat\Console;
 
 use Illuminate\Console\Command;
+use Ollyxar\WebSockets\Server;
 
 class ServerCommand extends Command
 {
@@ -39,6 +40,23 @@ class ServerCommand extends Command
      */
     public function handle(): void
     {
-        $this->info("hurray!");
+        $this->info("starting server...");
+
+        $server = new Server(
+            $this->config->get('websockets-chat.host'),
+            $this->config->get('websockets-chat.port'),
+            $this->config->get('websockets-chat.worker_count'),
+            $this->config->get('websockets-chat.use_ssl')
+        );
+
+        if ($this->config->get('websockets-chat.use_ssl')) {
+            $this->info("Setting up SSL...");
+            $server
+                ->setCert($this->config->get('websockets-chat.cert'))
+                ->setPassPhrase($this->config->get('websockets-chat.pass_phrase'));
+        }
+
+        $server->setHandler($this->config->get('websockets-chat.handler'));
+        $server->run();
     }
 }
