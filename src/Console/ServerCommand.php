@@ -19,12 +19,12 @@ class ServerCommand extends Command
      */
     protected $description = 'WebSockets Chat server starter.';
 
-    /** @var \Illuminate\Config\Repository */
+    /**
+     * @var \Illuminate\Config\Repository
+     */
     protected $config;
 
-
     /**
-     *
      * @param \Illuminate\Config\Repository $config
      */
     public function __construct($config) {

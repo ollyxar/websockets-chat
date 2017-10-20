@@ -17,14 +17,14 @@ class Send2ServerCommand extends Command
      *
      * @var string
      */
-    protected $description = 'WebSockets Chat server starter.';
-
-    /** @var \Illuminate\Config\Repository */
-    protected $config;
-
+    protected $description = 'WebSockets Chat direct messaging.';
 
     /**
-     *
+     * @var \Illuminate\Config\Repository
+     */
+    protected $config;
+
+    /**
      * @param \Illuminate\Config\Repository $config
      */
     public function __construct($config) {

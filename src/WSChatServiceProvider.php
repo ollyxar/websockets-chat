@@ -4,24 +4,23 @@ use Illuminate\Support\ServiceProvider;
 use Ollyxar\WSChat\Console\Send2ServerCommand;
 use Ollyxar\WSChat\Console\ServerCommand;
 
+/**
+ * Class WSChatServiceProvider
+ * @package Ollyxar\WSChat
+ */
 class WSChatServiceProvider extends ServiceProvider
 {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
      * @var bool
      */
     protected $defer = true;
 
     /**
-     * Bootstrap the application events.
-     *
-     * @return void
+     * Loading config
      */
     public function boot()
     {
-        
         $configPath = __DIR__ . '/../config/websockets-chat.php';
         if (function_exists('config_path')) {
             $publishPath = config_path('websockets-chat.php');
@@ -32,14 +31,14 @@ class WSChatServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the service provider.
+     * Register commands
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $configPath = __DIR__ . '/../config/websockets-chat.php';
-        $this->mergeConfigFrom($configPath, 'ide-helper');
+        $this->mergeConfigFrom($configPath, 'websockets-chat');
         
         $this->app->singleton(
             'command.websockets-chat.run',
@@ -49,7 +48,7 @@ class WSChatServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            'command.iwebsockets-chat.send',
+            'command.websockets-chat.send',
             function ($app) {
                 return new Send2ServerCommand($app['config']);
             }
@@ -59,11 +58,11 @@ class WSChatServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     * Define commands
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return ['command.websockets-chat.run', 'command.websockets-chat.send'];
     }
