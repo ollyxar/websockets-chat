@@ -5,6 +5,7 @@
 ![License](https://poser.pugx.org/ollyxar/websockets-chat/license.svg)
 
 ![logo](https://i.imgur.com/EAROGwT.jpg)
+<meta property="og:image" content="https://i.imgur.com/EAROGwT.jpg" />
 
 ## Requirements
 
