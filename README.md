@@ -4,6 +4,8 @@
 ![Downloads](https://poser.pugx.org/ollyxar/websockets-chat/d/total.svg)
 ![License](https://poser.pugx.org/ollyxar/websockets-chat/license.svg)
 
+![logo](https://i.imgur.com/EAROGwT.jpg)
+
 ## Requirements
 
 * Unix (extension [pcntl_fork](http://php.net/manual/function.pcntl-fork.php))
