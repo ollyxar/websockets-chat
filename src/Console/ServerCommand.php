@@ -3,6 +3,10 @@
 use Illuminate\Console\Command;
 use Ollyxar\WebSockets\Server;
 
+/**
+ * Class ServerCommand
+ * @package Ollyxar\WSChat\Console
+ */
 class ServerCommand extends Command
 {
 

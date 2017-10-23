@@ -1,7 +1,13 @@
 <?php namespace Ollyxar\WSChat\Console;
 
 use Illuminate\Console\Command;
+use Ollyxar\WebSockets\Server as WServer;
+use Ollyxar\WebSockets\Frame;
 
+/**
+ * Class Send2ServerCommand
+ * @package Ollyxar\WSChat\Console
+ */
 class Send2ServerCommand extends Command
 {
 
@@ -11,6 +17,13 @@ class Send2ServerCommand extends Command
      * @var string
      */
     protected $name = 'websockets-chat:send';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'websockets-chat:send {message}';
 
     /**
      * The console command description.
@@ -39,6 +52,16 @@ class Send2ServerCommand extends Command
      */
     public function handle(): void
     {
-        $this->info("hurray send!");
+        $socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+        socket_connect($socket, WServer::$connector);
+
+        $data = new \stdClass();
+        $data->type = 'system';
+        $data->message = $this->argument('message');
+        $msg = Frame::encode(json_encode($data));
+
+        socket_write($socket, $msg);
+        socket_close($socket);
+        $this->info("Message sent.");
     }
 }
