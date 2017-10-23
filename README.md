@@ -28,6 +28,12 @@ Next, run the Composer command to install the latest stable version of WebSocket
 php composer.phar require ollyxar/websockets-chat
 ```
 
+After updating composer, add the service provider to the `providers` array in `config/app.php`
+
+```php
+Ollyxar\WSChat\WSChatServiceProvider::class,
+```
+
 ## Configuration
 
 You can customize variables bellow by adding config-file: `websockets-chat.php` in the config folder:
@@ -230,4 +236,16 @@ ws.onclose = function () {
     el.innerText = 'Connection Closed';
     document.getElementById('message-box').appendChild(el);
 };
+```
+
+### Starting WebSocket Server
+
+```bash
+php artisan websockets-chat:run
+```
+
+### Sending direct message to the server
+
+```bash
+php artisan websockets-chat:send "Hello from system!"
 ```
