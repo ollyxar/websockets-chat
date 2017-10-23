@@ -18,7 +18,6 @@
   ],
   "require": {
     "php": ">=7.1",
-    "illuminate/auth": "^5.0",
     "illuminate/console": "^5.0",
     "ollyxar/websockets": "^1.0"
   },
