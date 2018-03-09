@@ -67,7 +67,9 @@ First you have to install auth-helper:
  namespace App;
  
 use Generator;
-use Ollyxar\LaravelAuth\RedisAuth;
+use Ollyxar\LaravelAuth\FileAuth;
+// or you can use RedisAuth if you're storing sessions in the Redis-server:
+// use Ollyxar\LaravelAuth\RedisAuth;
 use Ollyxar\WebSockets\{
     Frame,
     Handler as Worker,
