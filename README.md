@@ -66,9 +66,13 @@ First you have to install auth-helper:
  ```php
  namespace App;
  
- use Ollyxar\LaravelAuth\FileAuth;
- use Ollyxar\WebSockets\Frame;
- use Ollyxar\WebSockets\Worker;
+use Generator;
+use Ollyxar\LaravelAuth\RedisAuth;
+use Ollyxar\WebSockets\{
+    Frame,
+    Handler as Worker,
+    Dispatcher
+};
  
  /**
   * Class Handler
@@ -83,6 +87,13 @@ First you have to install auth-helper:
       */
      protected $users = [];
  
+     /**
+      * Append connected user
+      *
+      * @param array $headers
+      * @param $socket
+      * @return bool
+      */
      private function fillUser(array $headers, $socket): bool
      {
          if ($userId = FileAuth::getUserIdByHeaders($headers)) {
@@ -98,15 +109,15 @@ First you have to install auth-helper:
  
      /**
       * @param $client
+      * @return Generator
       */
-     protected function onConnect($client): void
+     protected function onConnect($client): Generator
      {
          $userName = User::where('id', (int)$this->users[(int)$client])->first()->name;
- 
-         $this->sendToAll(Frame::encode(json_encode([
+         yield Dispatcher::async($this->broadcast(Frame::encode(json_encode([
              'type'    => 'system',
              'message' => $userName . ' connected.'
-         ])));
+         ]))));
      }
  
      /**
@@ -114,31 +125,35 @@ First you have to install auth-helper:
       * @param $socket
       * @return bool
       */
-     protected function afterHandshake(array $headers, $socket): bool
+     protected function validateClient(array $headers, $socket): bool
      {
          return $this->fillUser($headers, $socket);
      }
  
      /**
       * @param $clientNumber
+      * @return Generator
       */
-     protected function onClose($clientNumber): void
+     protected function onClose($clientNumber): Generator
      {
-         $userName = User::where('id', (int)$this->users[$clientNumber])->first()->name;
+         $user = User::where('id', (int)@$this->users[$clientNumber])->first();
+         $userName = data_get($user, 'name', '[GUEST]');
  
-         $this->sendToAll(Frame::encode(json_encode([
+         yield Dispatcher::async($this->broadcast(Frame::encode(json_encode([
              'type'    => 'system',
              'message' => $userName . " disconnected."
-         ])));
-         
+         ]))));
+ 
          unset($this->users[$clientNumber]);
+         yield;
      }
  
      /**
       * @param string $message
       * @param int $socketId
+      * @return Generator
       */
-     protected function onDirectMessage(string $message, int $socketId): void
+     protected function onClientMessage(string $message, int $socketId): Generator
      {
          $message = json_decode($message);
          $userName = User::where('id', (int)$this->users[$socketId])->first()->name;
@@ -150,7 +165,7 @@ First you have to install auth-helper:
              'message' => $userMessage
          ]));
  
-         $this->sendToAll($response);
+         yield Dispatcher::async($this->broadcast($response));
      }
  }
  ```

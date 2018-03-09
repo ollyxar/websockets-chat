@@ -19,7 +19,7 @@
   "require": {
     "php": ">=7.1",
     "illuminate/console": "^5.0",
-    "ollyxar/websockets": "^1.0"
+    "ollyxar/websockets": "^2.0"
   },
   "autoload": {
     "psr-4": {
